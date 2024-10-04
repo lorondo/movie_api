@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to my favorite movie app!');
 });
 
-app.use('express.static('documentation.html'));
+app.use(express.static('public'));
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
