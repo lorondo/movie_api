@@ -1,11 +1,15 @@
-const express = require('express');
-    morgan = require('morgan');
+const express = require('express'),
+    morgan = require('morgan'),
+    bodyParser = require('body-parser'),
+    uuid = require('uuid');
 
 const app = express();
 
 app.use(morgan('common'));
 
-let topMovies = [
+app.use(bodyParser.json());
+
+let Movies = [
     {
         title: 'Raiders of the Lost Ark',
         director: 'Steven Spielberg'
@@ -48,8 +52,58 @@ let topMovies = [
     }
 ];
 
+// Gets the list of data about all movies
+
 app.get('/movies', (req, res) => {
-    res.json(topMovies);
+    res.send('Successful GET list of data about all movies');
+});
+
+// Gets the data about a single movie, by title
+
+app.get('/movies/:title', (req, res) => {
+    res.send('Successful GET data about a single movie, by title');
+});
+
+// Gets movie genre, by title
+
+app.get('/movies/:title/:genre', (req, res) => {
+    res.send('Successful GET movie genre, by title');
+});
+
+// Gets movie director, by title
+
+app.get('/movies/:title/:director', (req, res) => {
+    res.send('Successful GET movie director, by title');
+});
+
+// Adds data for a new user to our list of users
+
+app.post('/users', (req, res) => {
+    res.send('Successful POST update new user to user list');
+});
+
+// Update the username of a User
+
+app.put('/users/:username', (req, res) => {
+    res.send('Successful PUT user updates username');
+});
+
+// User adds movie to list of favorite movies
+
+app.put('/users/:movies/:title', (req, res) => {
+    res.send('Successful PUT user adds new movie to favorite movies list');
+});
+
+// User removes movie from list of favorite movies
+
+app.delete('/users/:movies/:title', (req, res) => {
+    res.send('Successful DELETE user removes movie from favorite movies list');
+});
+
+// User deregisters 
+
+app.delete('/users/', (req, res) => {
+    res.send('Successful DELETE user account');
 });
 
 app.get('/', (req, res) => {
