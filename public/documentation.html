@@ -1,63 +1,85 @@
 1. Get All Movies
-    Description:
+    Description: Returns the data for all the movies
     Endpoint URL: http://localhost:8080/movies/
     Method Type: GET
-    Query Parameters:
-    Format of Data in Body/Example:
-    Format of the Response Data:
+    Query Parameters: none
+    Format of Data in Body/Example: Lists all the movie data, 
+    {
+        'Title':'Raiders of the Lost Ark',
+        'Director': {'Name':'Steven Spielberg'},
+        'Genre': {'Name':'Action_Adventure'}
+    }
+    Format of the Response Data: JSON
 2. Get Movie by Title
-    Description:
-    Endpoint URL: http://localhost:8080/movies/title
+    Description: Returns movie data for a specific movie title
+    Endpoint URL: http://localhost:8080/movies/:title
     Method Type: GET
-    Query Parameters:
-    Format of Data in Body/Example:
-    Format of the Response Data:
+    Query Parameters: title
+    Format of Data in Body/Example: 
+    {
+        'Title':'Raiders of the Lost Ark',
+        'Director': {'Name':'Steven Spielberg'},
+        'Genre': {'Name':'Action_Adventure'}
+    }
+    Format of the Response Data: JSON
 3. Get Genre by Title
-    Description:
-    Endpoint URL: http://localhost:8080/movies/title/genre
+    Description: Returns genre data
+    Endpoint URL: http://localhost:8080/movies/genre/:genreName
     Method Type: GET
-    Query Parameters:
+    Query Parameters: genreName
     Format of Data in Body/Example:
-    Format of the Response Data:
+    Format of the Response Data: JSON
 4. Get Director Data by Title
-    Description:
-    Endpoint URL: http://localhost:8080/movies/title/director
+    Description: Returns director data 
+    Endpoint URL: http://localhost:8080/movies/directors/:directorName
     Method Type: GET
-    Query Parameters:
+    Query Parameters: directorName
     Format of Data in Body/Example:
-    Format of the Response Data:
+    {'Name':'Action_Adventure'}
+    Format of the Response Data: JSON
 5. Add New Users
-    Description:
+    Description: Adds new users to the users array
     Endpoint URL: http://localhost:8080/users/
     Method Type: POST
-    Query Parameters:
-    Format of Data in Body/Example:
-    Format of the Response Data:
+    Query Parameters: None
+    Format of Data in Body/Example: 
+    "name": "Mary",
+    "favoriteMovies": [],
+    "id": -random string of numbes-
+    Format of the Response Data: JSON
 6. Users Update their Username
-    Description:
-    Endpoint URL: http://localhost:8080/users/username
+    Description: Updates the id of a user
+    Endpoint URL: http://localhost:8080/users/:id
     Method Type: PUT
-    Query Parameters:
+    Query Parameters: id
     Format of Data in Body/Example:
-    Format of the Response Data:
+    "id": 1,
+    "name": "Kim Updated Name",
+    "favoriteMovies": []
+    Format of the Response Data: JSON
 7. Users Add Movies to List of Favorites
-    Description:
-    Endpoint URL: http://localhost:8080/users/movies/title
-    Method Type: PUT
-    Query Parameters:
-    Format of Data in Body/Example:
-    Format of the Response Data:
+    Description: Adds movies to a users list of favorite movies
+    Endpoint URL: http://localhost:8080/users/:id/:movieTitle
+    Method Type: POST
+    Query Parameters: id, movieTitle
+    Format of Data in Body/Example: 
+    "id": 1,
+    "name": "Bob",
+    "favoriteMovies": [
+        "The Fountain"
+        ]
+    Format of the Response Data: JSON
 8. Users Remove Movies from List of Favorites
-    Description:
-    Endpoint URL: http://localhost:8080/users/movies/title
+    Description: Remove movie from a users list of favorite movies
+    Endpoint URL: http://localhost:8080/users/:id/:movieTitle
     Method Type: DELETE
-    Query Parameters:
-    Format of Data in Body/Example:
-    Format of the Response Data:
+    Query Parameters: id, movieTitle
+    Format of Data in Body/Example: Star Wars has been removed from user 2's array
+    Format of the Response Data: HTML
 9. Users Deregister
-    Description:
-    Endpoint URL: http://localhost:8080/users/
+    Description: Deregister a user
+    Endpoint URL: http://localhost:8080/users/:id
     Method Type: DELETE
-    Query Parameters:
-    Format of Data in Body/Example:
-    Format of the Response Data:
+    Query Parameters: id
+    Format of Data in Body/Example: user 2 has been deleted
+    Format of the Response Data: HTML
