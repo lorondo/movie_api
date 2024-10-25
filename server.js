@@ -1,3 +1,15 @@
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect('mongodb://localhost:27017/dbname',
+    { 
+      useNewUrlParser: true, 
+      useUnifiedTopology: true
+    });
+
 const express = require('express'),
   app = express(),
   bodyParser = require('body-parser'),
@@ -5,71 +17,71 @@ const express = require('express'),
 
 app.use(bodyParser.json());
 
-let users = [
-  {
-    id: 1,
-    name: "Bob",
-    favoriteMovies: [] 
-  },
-  {
-    id: 2,
-    name: "Mitch",
-    favoriteMovies: ["Star Wars"] 
-  }
-];
+// let users = [
+//   {
+//     id: 1,
+//     name: "Bob",
+//     favoriteMovies: [] 
+//   },
+//   {
+//     id: 2,
+//     name: "Mitch",
+//     favoriteMovies: ["Star Wars"] 
+//   }
+// ];
 
-let movies = [
-  {
-    'Title':'Raiders of the Lost Ark',
-    'Director': {'Name':'Steven Spielberg'},
-    'Genre': {'Name':'Action_Adventure'}
-},
-{
-    'Title':'Jurassic Park',
-    'Director': {'Name':'Steven Spielberg'},
-    'Genre': {'Name':'Action_Adventure'}
-},
-{
-    'Title':'The Shape of Water',
-    'Director': {'Name':'Guillermo del Toro'},
-    'Genre': {'Name':'Drama_Fantasy'}
-},
-{
-    'Title':'Hudson Hawk',
-    'Director': {'Name':'Michael Lehmann'},
-    'Genre': {'Name':'Action_Adventure'}
-},
-{
-    'Title':'Ocean\'s Eleven',
-    'Director': {'Name':'Steven Soderbergh'},
-    'Genre': {'Name':'Crime_Thriller'}
-},
-{
-    'Title':'Cloud Atlas',
-    'Director': {'Name':'Lana Wachowski, Tom Tykwer, and Lilly Wachowski'},
-    'Genre': {'Name':'Drama_Mystery'}
-},
-{
-    'Title':'Guardians of the Galaxy',
-    'Director': {'Name':'James Gunn'},
-    'Genre': {'Name':'Action_Adventure'}
-},
-{
-    'Title':'Batman Begins',
-    'Director': {'Name':'Christopher Nolan'},
-    'Genre': {'Name':'Action_Crime'}
-},
-{
-    'Title':'Beauty and the Beast',
-    'Director': {'Name':'Gary Trousdale and Kirk Wise'},
-    'Genre': {'Name':'Animation_Fantasy'}
-},
-{
-    'Title':'The Lord of the Rings: The Fellowship of the Ring',
-    'Director': {'Name':'Peter Jackson'},
-    'Genre': {'Name':'Action_Adventure'}
-}
-];
+// let movies = [
+//   {
+//     'Title':'Raiders of the Lost Ark',
+//     'Director': {'Name':'Steven Spielberg'},
+//     'Genre': {'Name':'Action_Adventure'}
+// },
+// {
+//     'Title':'Jurassic Park',
+//     'Director': {'Name':'Steven Spielberg'},
+//     'Genre': {'Name':'Action_Adventure'}
+// },
+// {
+//     'Title':'The Shape of Water',
+//     'Director': {'Name':'Guillermo del Toro'},
+//     'Genre': {'Name':'Drama_Fantasy'}
+// },
+// {
+//     'Title':'Hudson Hawk',
+//     'Director': {'Name':'Michael Lehmann'},
+//     'Genre': {'Name':'Action_Adventure'}
+// },
+// {
+//     'Title':'Ocean\'s Eleven',
+//     'Director': {'Name':'Steven Soderbergh'},
+//     'Genre': {'Name':'Crime_Thriller'}
+// },
+// {
+//     'Title':'Cloud Atlas',
+//     'Director': {'Name':'Lana Wachowski, Tom Tykwer, and Lilly Wachowski'},
+//     'Genre': {'Name':'Drama_Mystery'}
+// },
+// {
+//     'Title':'Guardians of the Galaxy',
+//     'Director': {'Name':'James Gunn'},
+//     'Genre': {'Name':'Action_Adventure'}
+// },
+// {
+//     'Title':'Batman Begins',
+//     'Director': {'Name':'Christopher Nolan'},
+//     'Genre': {'Name':'Action_Crime'}
+// },
+// {
+//     'Title':'Beauty and the Beast',
+//     'Director': {'Name':'Gary Trousdale and Kirk Wise'},
+//     'Genre': {'Name':'Animation_Fantasy'}
+// },
+// {
+//     'Title':'The Lord of the Rings: The Fellowship of the Ring',
+//     'Director': {'Name':'Peter Jackson'},
+//     'Genre': {'Name':'Action_Adventure'}
+// }
+// ];
 
 //CREATE (add a new user)
 app.post('/users', async (req, res) => {
