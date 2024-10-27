@@ -43,6 +43,11 @@ require('./passport');
   Email: String,
   Birthday: Date
 }*/
+
+app.get('/', (req, res) => {
+  res.send('Welcome to my app!');
+});
+
 app.post('/users', 
   [
     check('Username', 'Username is required').isLength({min: 5}),
