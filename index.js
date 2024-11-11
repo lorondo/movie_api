@@ -33,6 +33,11 @@ const passport = require('passport');
 
 require('./passport');
 
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+  console.log('Listening on Port ' + port);
+});
+
 //CREATE (add a new user)
 //Add a user
 /* We’ll expect JSON in this format
@@ -51,10 +56,12 @@ app.get('/', (req, res) => {
 app.post('/users', 
   [
     check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'USername contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
   ], async (req, res) => {
+
+    // check the validation objects for errors
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -62,15 +69,16 @@ app.post('/users',
     }
 
   let hashedPassword = Users.hashPassword(req.body.Password);
-  await Users.findOne({ Username: req.body.Username })
+  await Users.findOne({ Username: req.body.Username }) // Search to see if a user with requested username already exists
     .then((user) => {
       if (user) {
-        return res.status(400).send(req.body.Username + 'already exists');
+        // If use is found, send a response that it already exists
+        return res.status(400).send(req.body.Username + ' already exists');
       } else {
         Users
           .create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -283,9 +291,4 @@ app.delete('/users/:Username', async (req, res) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
     });
-});
-
-const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
-  console.log('Listening on Port ' + port);
 });
