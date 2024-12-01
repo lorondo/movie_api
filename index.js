@@ -110,6 +110,70 @@ app.post('/users',
 //  }
 // })
 
+/* POST login. */
+// module.exports = (router) => {
+//   router.post('/login', (req, res) => {
+//     passport.authenticate('local', { session: false }, (error, user, info) => {
+//       if (error || !user) {
+//         return res.status(400).json({
+//           message: 'Something is not right',
+//           user: user
+//         });
+//       }
+//       req.login(user, { session: false }, (error) => {
+//         if (error) {
+//           res.send(error);
+//         }
+//         let token = generateJWTToken(user.toJSON());
+//         return res.json({ user, token });
+//       });
+//     })(req, res);
+//   });
+// }
+
+// Login endpoint with additional checks
+app.post('/login', async (req, res) => {
+  const { Username, Password } = req.body;
+
+  if (!Username || !Password) {
+    return res.status(400).send('Username and Password are required');
+  }
+
+  try {
+    // Find the user by username
+    const user = await Users.findOne({ Username: Username });
+    if (!user) {
+      return res.status(401).send('User not found');
+    }
+
+    // Validate the password using a method like bcrypt
+    const isValidPassword = user.validatePassword(Password);
+    if (!isValidPassword) {
+      return res.status(401).send('Invalid password');
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ Username: user.Username }, process.env.JWT_SECRET, {
+      expiresIn: '7d', // Token expiration time
+    });
+
+    // Respond with the token and user data
+    return res.status(200).json({
+      message: 'Login successful',
+      token: token,
+      user: {
+        Username: user.Username,
+        Email: user.Email,
+        Birthday: user.Birthday,
+        FavoriteMovies: user.FavoriteMovies,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+  }
+});
+
 //POST (user updates favorite movie list)
 app.post('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;
