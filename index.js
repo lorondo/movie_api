@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 const cors = require('cors');
 app.use(cors());
 
-// let auth = require('./auth')(app);
+let auth = require('./auth')(app);
 const passport = require('passport');
 
 require('./passport');
@@ -218,7 +218,7 @@ app.post('/users/:id/:movieTitle', (req, res) => {
 // })
 
 // READ (get all movies)
-app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: true }), async (req, res) => {
   await Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
