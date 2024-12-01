@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const jwt = require('jsonwebtoken');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -28,7 +29,7 @@ app.use(bodyParser.json());
 const cors = require('cors');
 app.use(cors());
 
-let auth = require('./auth')(app);
+// let auth = require('./auth')(app);
 const passport = require('passport');
 
 require('./passport');
