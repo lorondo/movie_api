@@ -229,10 +229,10 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
     });
 });
 
-//READ (get movie, by title)
-app.get('/movies/:title', (req, res) => {
-  const { title } = req.params;
-  const movie = movies.find( movie => movie.Title === title );
+//READ (get movie, by ID)
+app.get('/movies/:movieId', (req, res) => {
+  const { movieId } = req.params;
+  const movie = movies.find( movie => movie._id === movieId );
 
   if (movie){
     res.status(200).json(movie);
