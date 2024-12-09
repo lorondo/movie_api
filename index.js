@@ -154,7 +154,7 @@ app.post('/login', async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ Username: user.Username }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ Username: user.Username }, 'your_jwt_secret', {
       expiresIn: '7d', // Token expiration time
     });
 
@@ -230,21 +230,42 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 });
 
 //READ (get movie, by ID)
-app.get('/movies/:movieId', (req, res) => {
+app.get('/movies/:movieId', async (req, res) => {
   const { movieId } = req.params;
-  const movie = movies.find( movie => movie._id === movieId );
+  await Movies.findById(movieId)
+    .then((movie) => {
+      res.json(movie);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
 
-  if (movie){
-    res.status(200).json(movie);
-  } else {
-    res.status(400).send('no such movie')
-  }
+//READ (get movie, by Title)
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  await Movies.findOne({ Title: req.params.Title })
+      .then((movie) => {
+          if (movie) {
+              res.json(movie);
+          } else {
+              res.status(404).send(
+                  'Movie with the title ' +
+                      req.params.Title +
+                      ' was not found.'
+              );
+          }
+      })
+      .catch((err) => {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+      });
 });
 
 //READ (get movies genre data, by genre)
 app.get('/movies/genre/:genreName', (req, res) => {
   const { genreName } = req.params;
-  const genre = movies.find( movie => movie.Genre.Name === genreName ).Genre;
+  const genre = Movies.find( movie => movie.Genre.Name === genreName ).Genre;
 
   if (genre){
     res.status(200).json(genre);
@@ -256,7 +277,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
 //READ (get director data, by director name)
 app.get('/movies/directors/:directorName', (req, res) => {
   const { directorName } = req.params;
-  const director = movies.find( movie => movie.Director.Name === directorName ).Director;
+  const director = Movies.find( movie => movie.Director.Name === directorName ).Director;
 
   if (director){
     res.status(200).json(director);
