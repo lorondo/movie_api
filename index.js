@@ -175,33 +175,49 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//POST (user updates favorite movie list)
-app.post('/users/:id/:movieTitle', (req, res) => {
-  const { id, movieTitle } = req.params;
+// POST (user updates favorite movie list)
+app.post('/users/:Username/movies/:MovieID', async (req, res) => {
+  try {
+    const query = { Username: { $regex: new RegExp(`^${req.params.Username}$`, 'i') } }; // Case-insensitive match
 
- let user = Users.find( user => user.id == id );
+    // Find and update the user's favorite movies
+    const updatedUser = await Users.findOneAndUpdate(
+      query,
+      { $push: { FavoriteMovies: req.params.MovieID } },
+      { new: true } // Return the updated document
+    );
 
- if (user) {
-  user.favoriteMovies.push(movieTitle);
-  res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
- } else {
-  res.status(400).send('no such user')
- }
-})
+    if (!updatedUser) {
+      return res.status(404).send('User not found.');
+    }
 
-// //DELETE (user removes movie from favorite movies list)
-// app.delete('/users/:id/:movieTitle', (req, res) => {
-//   const { id, movieTitle } = req.params;
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).send('Error: ' + err);
+  }
+});
 
-//  let user = Users.find( user => user.id == id );
+// DELETE (user removes movie from favorite movies list)
+app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
+  try {
+    const query = { Username: { $regex: new RegExp(`^${req.params.Username}$`, 'i') } }; // Case-insensitive match
 
-//  if (user) {
-//   user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
-//   res.status(200).send(`${movieTitle} has been removed from user ${id}'s array`);
-//  } else {
-//   res.status(400).send('no such user')
-//  }
-// })
+    // Find and update the user's favorite movies
+    const updatedUser = await Users.findOneAndUpdate(
+      query,
+      { $pull: { FavoriteMovies: req.params.MovieID } },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send('User not found.');
+    }
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).send('Error: ' + err);
+  }
+});
 
 // //DELETE (user can deregister)
 // app.delete('/users/:id', (req, res) => {
@@ -345,22 +361,6 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
     res.status(500).send('Error: ' + err);
   })
 
-});
-
-// Add a movie to a user's list of favorites
-app.post('/users/:Username/movies/:MovieID', async (req, res) => {
-  await Users.findOneAndUpdate({ Username: req.params.Username},
-      {
-          $push: { FavoriteMovies: req.params.MovieID }
-      },
-      { new: true }) //This line makes sure that the updated document is returned
-      .then((updatedUser) => {
-          res.json(updatedUser);
-      })
-      .catch((err) => {
-          console.error(err);
-          res.status(500).send('Error: ' + err);
-      });
 });
 
 // Delete a user by username
