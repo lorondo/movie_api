@@ -39,21 +39,12 @@ app.listen(port, '0.0.0.0',() => {
   console.log('Listening on Port ' + port);
 });
 
-//CREATE (add a new user)
-//Add a user
-/* We’ll expect JSON in this format
-{
-  ID: Integer,
-  Username: String,
-  Password: String,
-  Email: String,
-  Birthday: Date
-}*/
-
+// GET Default page
 app.get('/', (req, res) => {
   res.send('Welcome to my app!');
 });
 
+// POST Creating a new user
 app.post('/users', 
   [
     check('Username', 'Username is required').isLength({min: 5}),
@@ -96,43 +87,7 @@ app.post('/users',
     });
 });
 
-// //UPDATE (update user id)
-// app.put('/users/:id', (req, res) => {
-//   const { id } = req.params;
-//   const updatedUser = req.body;
-
-//  let user = Users.find( user => user.id == id );
-
-//  if (user) {
-//   user.name = updatedUser.name;
-//   res.status(200).json(user);
-//  } else {
-//   res.status(400).send('users need names')
-//  }
-// })
-
-/* POST login. */
-// module.exports = (router) => {
-//   router.post('/login', (req, res) => {
-//     passport.authenticate('local', { session: false }, (error, user, info) => {
-//       if (error || !user) {
-//         return res.status(400).json({
-//           message: 'Something is not right',
-//           user: user
-//         });
-//       }
-//       req.login(user, { session: false }, (error) => {
-//         if (error) {
-//           res.send(error);
-//         }
-//         let token = generateJWTToken(user.toJSON());
-//         return res.json({ user, token });
-//       });
-//     })(req, res);
-//   });
-// }
-
-// Login endpoint with additional checks
+// POST Login endpoint with additional checks
 app.post('/login', async (req, res) => {
   const { Username, Password } = req.body;
 
@@ -175,7 +130,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// POST (user updates favorite movie list)
+// POST User updates favorite movie list
 app.post('/users/:Username/movies/:MovieID', async (req, res) => {
   try {
     const query = { Username: { $regex: new RegExp(`^${req.params.Username}$`, 'i') } }; // Case-insensitive match
@@ -197,7 +152,7 @@ app.post('/users/:Username/movies/:MovieID', async (req, res) => {
   }
 });
 
-// DELETE (user removes movie from favorite movies list)
+// DELETE User removes movie from favorite movies list
 app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
   try {
     const query = { Username: { $regex: new RegExp(`^${req.params.Username}$`, 'i') } }; // Case-insensitive match
@@ -219,21 +174,7 @@ app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
   }
 });
 
-// //DELETE (user can deregister)
-// app.delete('/users/:id', (req, res) => {
-//   const { id } = req.params;
-
-//  let user = Users.find( user => user.id == id );
-
-//  if (user) {
-//   users = users.filter( user => user.id != id);
-//   res.status(200).send(`user ${id} has been deleted`);
-//  } else {
-//   res.status(400).send('no such user')
-//  }
-// })
-
-// READ (get all movies)
+// READ Get all movies
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Movies.find()
     .then((movies) => {
