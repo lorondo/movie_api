@@ -186,7 +186,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
     });
 });
 
-//READ (get movie, by ID)
+//READ Get movie, by ID
 app.get('/movies/:movieId', async (req, res) => {
   const { movieId } = req.params;
   await Movies.findById(movieId)
@@ -199,7 +199,7 @@ app.get('/movies/:movieId', async (req, res) => {
     });
 });
 
-//READ (get movie, by Title)
+//GET Get movie, by Title
 app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Movies.findOne({ Title: req.params.Title })
       .then((movie) => {
@@ -219,7 +219,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), asyn
       });
 });
 
-//READ (get movies genre data, by genre)
+//GET Get movies genre data, by genre
 app.get('/movies/genre/:genreName', (req, res) => {
   const { genreName } = req.params;
   const genre = Movies.find( movie => movie.Genre.Name === genreName ).Genre;
@@ -231,7 +231,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
   }
 });
 
-//READ (get director data, by director name)
+//GET Get director data, by director name
 app.get('/movies/directors/:directorName', (req, res) => {
   const { directorName } = req.params;
   const director = Movies.find( movie => movie.Director.Name === directorName ).Director;
@@ -243,7 +243,7 @@ app.get('/movies/directors/:directorName', (req, res) => {
   }
 });
 
-// Get all users
+// GET Get all users
 app.get('/users', async (req, res) => {
   await Users.find()
     .then((users) => {
@@ -255,7 +255,7 @@ app.get('/users', async (req, res) => {
     });
 });
 
-// Get a user by username
+// GET a user by username
 app.get('/users/:Username', async (req, res) => {
   await Users.findOne({ Username: req.params.Username })
     .then((user) => {
@@ -267,17 +267,7 @@ app.get('/users/:Username', async (req, res) => {
     });
 });
 
-// Update a user's info, by username
-/* We’ll expect JSON in this format
-{
-  Username: String,
-  (required)
-  Password: String,
-  (required)
-  Email: String,
-  (required)
-  Birthday: Date
-}*/
+// PUT Update a user's info, by username
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // CONDITION TO CHECK ADDED HERE
   if(req.user.Username !== req.params.Username){
@@ -289,8 +279,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
     {
       Username: req.body.Username,
       Password: req.body.Password,
-      Email: req.body.Email,
-      Birthday: req.body.Birthday
+      Email: req.body.Email
     }
   },
   { new: true }) // This line makes sure that the updated document is returned
@@ -304,7 +293,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
 
 });
 
-// Delete a user by username
+// DELETE a user by username
 app.delete('/users/:Username', async (req, res) => {
   await Users.findOneAndDelete({ Username: req.params.Username })
     .then((user) => {
